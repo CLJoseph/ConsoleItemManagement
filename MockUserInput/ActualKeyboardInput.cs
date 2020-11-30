@@ -48,11 +48,17 @@ namespace MockUserInput
 
         public char readKey()
         {
-            var ch = Console.ReadKey().KeyChar;
-            Console.WriteLine();
+            var ch = Console.ReadKey(true).KeyChar;  // true option to stop key character being echoed to console.
+            // Console.WriteLine();
             return ch;
         }
-
+        public char readKey(string prompt)
+        {
+            Console.Write(prompt);
+            var ch = Console.ReadKey(true).KeyChar;  // true option to stop key character being echoed to console.
+            // Console.WriteLine();
+            return ch;
+        }
         public string readLn()
         {
             return Console.ReadLine();

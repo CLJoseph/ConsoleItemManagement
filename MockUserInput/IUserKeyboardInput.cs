@@ -10,6 +10,7 @@ namespace MockUserInput
         string readLn(string prompt);
         string read(string prompt);
         char readKey();
+        char readKey(string prompt);
         double getDoubleValue(string prompt);
         int getIntValue(string prompt);
     }

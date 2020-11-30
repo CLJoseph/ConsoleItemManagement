@@ -96,5 +96,11 @@ namespace MockUserInput
             _indexStringCount++;
             return ReturnString[_indexStringCount - 1];
         }
+
+        public char readKey(string prompt)
+        {
+            _indexCharCount++;
+            return ReturnChar[_indexCharCount - 1];
+        }
     }
 }
