@@ -12,7 +12,7 @@ namespace ConsoleItemManagement.Classes
     {
         public string stockItemsFile { get; set; }
         public string stockLocationsFile { get; set; }
-        IUserKeyboardInput _keyboard; 
+        IUserKeyboardInput _keyboard;
         List<Item> StockItems = new List<Item>();
         List<Location> StockLocations = new List<Location>();
         public StockManager()
@@ -46,14 +46,13 @@ namespace ConsoleItemManagement.Classes
         }
         private void SaveStockItems()
         {
-            using (StreamWriter writer = new StreamWriter(stockItemsFile)) 
+            using (StreamWriter writer = new StreamWriter(stockItemsFile))
             {
                 // serialize stockitems into json and write the result to file.
                 var Jsonoutput = JsonSerializer.Serialize<List<Item>>(StockItems);
                 writer.WriteLine(Jsonoutput);
             }
         }
-
         public void addToStock()
         {
             var itemCode = GetItemCode();
@@ -61,10 +60,9 @@ namespace ConsoleItemManagement.Classes
             Location location = getLocation();
             location.Quantity += Qty;
         }
-
         public Location getLocation()
         {
-            do 
+            do
             {
                 var code = _keyboard.read("Enter location code :");
                 var toReturn = StockLocations.FirstOrDefault(x => x.code == code);
@@ -72,20 +70,19 @@ namespace ConsoleItemManagement.Classes
                 {
                     return toReturn;
                 }
-                else 
+                else
                 {
                     Console.WriteLine("Invalid Location code, try again.");
                 }
             } while (true);
         }
-
         public void takeFromStock()
         {
             var itemCode = GetItemCode();
             var locations = StockLocations.Where(x => x.ItemCode == itemCode).ToList();
-            if (locations.Count > 0) 
+            if (locations.Count > 0)
             {
-                foreach (var loc in locations) 
+                foreach (var loc in locations)
                 {
                     Console.WriteLine($"Location - {loc.code} has {loc.Quantity} of {loc.ItemCode} ");
                 }
@@ -98,14 +95,14 @@ namespace ConsoleItemManagement.Classes
                         L.Quantity = L.Quantity - Qty;
                         return;
                     }
-                    else {
+                    else
+                    {
                         Console.WriteLine("Invalid Quantity Entered. ");
                     }
 
                 } while (true);
             }
         }
-
         public void listAllStock()
         {
             Console.WriteLine("-----  All Stock  ------");
@@ -114,14 +111,13 @@ namespace ConsoleItemManagement.Classes
             {
                 var code = l.code.PadRight(8, ' ').Substring(0, 8);
                 var itemcode = l.ItemCode.PadRight(8, ' ').Substring(0, 8);
-                var Quantity = l.Quantity.ToString("0000.00");
+                var Quantity = l.Quantity.ToString("0").PadRight(6, ' ').Substring(0, 6); ;
                 var item = StockItems.FirstOrDefault<Item>(x => x.code == l.ItemCode);
-                var value = (l.Quantity * item.value).ToString("0000.00");
-                Console.WriteLine($"{code} {itemcode} {Quantity}  {value} ");
+                var value = (l.Quantity * item.value).ToString("0.00");
+                Console.WriteLine($"{code} {itemcode}       {Quantity}      {value} ");
             }
             Console.WriteLine("--------------------------");
         }
-
         public void listStockLocations()
         {
             Console.WriteLine("-----   Stock Locations ------");
@@ -134,22 +130,20 @@ namespace ConsoleItemManagement.Classes
             }
             Console.WriteLine("--------------------------");
         }
-
         public void listStockItems()
         {
             Console.WriteLine("-----   Stock Items ------");
             Console.WriteLine("Code     Name                 Description                             Value");
-            foreach (var l in StockItems) 
+            foreach (var l in StockItems)
             {
                 var code = l.code.PadRight(8, ' ').Substring(0, 8);
-                var description =l.description.PadRight(30, ' ').Substring(0,30);
-                var nam =  l.name.PadRight(20, ' ').Substring(0, 20);
-                var value =l.value.ToString("0,00");
+                var description = l.description.PadRight(30, ' ').Substring(0, 30);
+                var nam = l.name.PadRight(20, ' ').Substring(0, 20);
+                var value = l.value.ToString("0,00");
                 Console.WriteLine($"{code} {nam} {description} {value} ");
             }
             Console.WriteLine("--------------------------");
         }
-
         private void SaveStockLocations()
         {
             using (StreamWriter writer = new StreamWriter(stockLocationsFile))
@@ -178,7 +172,6 @@ namespace ConsoleItemManagement.Classes
                 Console.WriteLine("Location discarded");
             }
         }
-
         private void Displaylocation(Location location)
         {
             Console.WriteLine("Location Details :");
@@ -187,10 +180,9 @@ namespace ConsoleItemManagement.Classes
             Console.WriteLine($"Item Quantity :{location.Quantity}");
             Console.WriteLine("=======================================");
         }
-
         private string GetItemCode()
         {
-            do 
+            do
             {
                 var result = _keyboard.read("Enter Item code   :");
                 // check code entered exists
@@ -198,13 +190,12 @@ namespace ConsoleItemManagement.Classes
                 {
                     return result;
                 }
-                else 
+                else
                 {
                     Console.WriteLine("Invalid code. try again. ");
                 }
             } while (true);
         }
-
         public void newStockItem()
         {
             Console.WriteLine("Enter new Item details ---------------- ");
@@ -219,33 +210,34 @@ namespace ConsoleItemManagement.Classes
                 StockItems.Add(item);
                 Console.WriteLine("Item added");
             }
-            else 
+            else
             {
                 Console.WriteLine("Item discarded");
             }
         }
-
         private string PromptYesNo(string prompt)
         {
-            do {
+            do
+            {
                 var result = _keyboard.readKey(prompt);
                 switch (result)
                 {
                     case 'Y':
-                    case 'y': Console.WriteLine();
-                              return "Yes";
+                    case 'y':
+                        Console.WriteLine();
+                        return "Yes";
                     case 'N':
-                    case 'n': Console.WriteLine(); 
-                              return "No";
+                    case 'n':
+                        Console.WriteLine();
+                        return "No";
                     default:
                         break;
                 }
-            } while (true); 
+            } while (true);
 
 
 
         }
-
         public void DisplayItem(Item item)
         {
             Console.WriteLine("Item Details :");
@@ -255,7 +247,6 @@ namespace ConsoleItemManagement.Classes
             Console.WriteLine($"Value       :{item.value}");
             Console.WriteLine("=======================================");
         }
-
         private void LoadStockItems()
         {
             if (File.Exists(stockItemsFile))
